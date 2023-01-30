@@ -1,14 +1,37 @@
  package main
  
  import (
+	 "bufio"
+	 "context"
+	 "fmt"
+	 "os"
 	 "github.com/spf13/viper"
 	 "github.com/PullRequestInc/go-gpt3"
 	 "github.com/spf13/cobra"
-
  )
 
- func main() {
+ func GetResponse(client *gpt3.Client, cntxt context.Context, question string) {
+	err := client.CompletionStreamWithEngine(ctx , gpt3.TextDavinci003Engine , gpt3.CompletionRequest{
+		Prompt: []string{
+			question
+		},
+		MaxTokens : gpt3.IntPtr(3000)
+		// Stop : []string{.}
+		Temperature : gpt3.Float32Ptr(0)
+		func(resp *gpt3.CompletionResponse, err error) {
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(resp.Choices[0].Text)
+		}
+ }
 
+ type NullWriter int 
+
+ func (NullWriter) Write([]byte) (int, error) { return 0, nil}
+
+ func main() {
+    log.SetOutput(new(NullWriter))
 	viper.SetConfigFile('.env');
 	viper.ReadInConfig();
 	apikey := viper.GetString("API_KEY");
@@ -41,7 +64,5 @@
 
 		}
 	}
-
-
-
+	rootCmd.Execute()
  }
