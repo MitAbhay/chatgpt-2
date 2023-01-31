@@ -33,7 +33,6 @@
  func (NullWriter) Write([]byte) (int, error) { return 0, nil}
 
  func main() {
-    // log.SetOutput(new(NullWriter))
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig();
 	apikey := viper.GetString("API_KEY");
@@ -49,7 +48,7 @@
 			scanner := bufio.NewScanner(os.Stdin)
 			quit := false
 			for !quit {
-				fmt.Print("ChatGPT in console : : ")
+				fmt.Print("Use ChatGPT in your console : ")
 				scanner.Scan()
 				question := scanner.Text()
 				switch question {
