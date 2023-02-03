@@ -17,9 +17,12 @@
 		},
 		MaxTokens : gpt3.IntPtr(3000),
 		Temperature : gpt3.Float32Ptr(0),
+		Stop: []string{"."},
+	    Echo: true,
 		},
 		func(resp *gpt3.CompletionResponse){
 		fmt.Println(resp.Choices[0].Text)
+		// fmt.Println("\033[u\033[K")
 	})
 
 	if err != nil {
@@ -33,6 +36,7 @@
  func (NullWriter) Write([]byte) (int, error) { return 0, nil}
 
  func main() {
+	
 	viper.SetConfigFile(".env")
 	viper.ReadInConfig();
 	apikey := viper.GetString("API_KEY");
